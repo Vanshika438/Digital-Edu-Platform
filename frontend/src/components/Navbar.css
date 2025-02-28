@@ -1,0 +1,103 @@
+/* Navbar.css */
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  background-color: #007bff; /* Original background color */
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced box shadow */
+  position: sticky; /* Make the navbar sticky */
+  top: 0;
+  z-index: 10;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.logo {
+  font-size: 2em; /* Increased logo size */
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 1.5em; /* Increased gap */
+}
+
+.nav-item {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 0.5em 1em;
+  border-radius: 8px; /* Slightly more rounded corners */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Added transition for transform */
+}
+
+.nav-item:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* Slight scale-up on hover */
+}
+
+.btn.logout-btn {
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 8px;
+  background-color: #dc3545; /* Original logout button color */
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn.logout-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+.animated-navbar {
+  animation: slideIn 0.5s ease-out;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #6d4c41; /* Brownish background */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  user-select: none;
+  margin-left: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user-avatar:hover {
+  background-color: #5a3b2e; /* Darker shade on hover */
+}
+
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

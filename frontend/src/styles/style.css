@@ -1,0 +1,318 @@
+/* userAvatar.js */
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #46b5ff; /* Brownish background */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* Home.js */
+.home-container {
+  text-align: center;
+  padding: 2em;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 2em auto;
+}
+
+.home-title {
+  font-size: 3em;
+  color: #2c3e50;
+  margin-bottom: 0.5em;
+}
+
+.home-subtitle {
+  font-size: 1.5em;
+  color: #7f8c8d;
+  margin-bottom: 2em;
+}
+
+.home-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+}
+
+.home-button {
+  width: 120px;
+  padding: 0.75em 1.5em;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #2980b9;
+}
+
+.register {
+  background-color: #2ecc71;
+}
+
+.register:hover {
+  background-color: #27ae60;
+}
+/* Styles for the heading */
+.dashboard-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1em;
+}
+
+/* Styles for the subheadings */
+.dashboard-container h3 {
+  color: #333;
+  margin-bottom: 0.5em;
+}
+
+/* Styles for the paragraphs */
+.dashboard-container p {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 1em;
+}
+
+/* Styles for the quick actions */
+.quick-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1em;
+}
+
+.quick-actions button {
+  padding: 0.75em 1.5em;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.quick-actions button:hover {
+  background-color: #0056b3;
+}
+
+.logout-btn {
+  background-color: #d9534f;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}
+
+/* Styles for the progress bar */
+.progress-bar {
+  width: 100%;
+  background-color: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 1em;
+}
+
+.progress-fill {
+  height: 20px;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 5px 0 0 5px;
+}
+
+/* Styles for the list of lessons */
+.lesson-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+}
+
+.lesson-item {
+  flex: 1 1 30%;
+  margin: 1em 0;
+  padding: 1em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.lesson-item.completed {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.lesson-item strong {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+.lesson-item .video-container {
+  width: 100%;
+  height: 200px;
+  margin-top: 1em;
+}
+
+.lesson-item iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  background-color: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 1em 0;
+}
+
+.progress-fill {
+  height: 20px;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 5px 0 0 5px;
+  transition: width 0.5s ease-in-out;
+}
+
+/* Mark completed lessons */
+.lesson-item.completed {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.completed-text {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}
+/* Responsive Styles */
+@media (max-width: 768px) {
+  /* General Layout */
+  .home-container, .dashboard-container {
+    max-width: 90%;
+    padding: 1.5em;
+  }
+
+  .home-title {
+    font-size: 2.2em;
+  }
+
+  .home-subtitle {
+    font-size: 1.2em;
+  }
+
+  .home-buttons {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .home-button {
+    width: 100%;
+  }
+
+  /* Navbar Adjustments */
+  .navbar {
+    flex-direction: column;
+    padding: 1em;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-links li {
+    margin: 5px 0;
+  }
+
+  /* User Avatar */
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  /* Dashboard Adjustments */
+  .quick-actions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .quick-actions button {
+    width: 80%;
+  }
+
+  /* Lessons List */
+  .lesson-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lesson-item {
+    width: 100%;
+    text-align: center;
+  }
+
+  .lesson-item .video-container {
+    height: 150px;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    height: 15px;
+  }
+
+  .progress-fill {
+    height: 15px;
+    line-height: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 1.8em;
+  }
+
+  .home-subtitle {
+    font-size: 1em;
+  }
+
+  .lesson-item {
+    padding: 0.8em;
+  }
+
+  .lesson-item strong {
+    font-size: 1em;
+  }
+
+  .lesson-item .video-container {
+    height: 120px;
+  }
+
+  .quick-actions button {
+    font-size: 0.9em;
+  }
+}
