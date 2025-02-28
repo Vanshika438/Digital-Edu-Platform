@@ -10,34 +10,56 @@ const Lessons = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/lessons")
-      .then(response => setLessons(response.data))
-      .catch(error => console.error("Error fetching lessons:", error));
+    const fetchLessons = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return console.error("❌ No authentication token found.");
 
-    if (user) {
-      axios.get(`http://localhost:5000/api/lessons/${user._id}/completed-lessons`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      })
-        .then(response => setCompletedLessons(response.data))
-        .catch(error => console.error("Error fetching completed lessons:", error));
-    }
+        const { data } = await axios.get("http://localhost:5000/api/lessons", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setLessons(data);
+      } catch (error) {
+        console.error("❌ Error fetching lessons:", error.response?.data || error.message);
+      }
+    };
+
+    const fetchCompletedLessons = async () => {
+      if (!user?._id) return; // Avoid fetching if user is not loaded
+
+      try {
+        const token = localStorage.getItem("token");
+        const { data } = await axios.get(`http://localhost:5000/api/completed-lessons/${user._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCompletedLessons(data);
+      } catch (error) {
+        console.error("❌ Error fetching completed lessons:", error.response?.data || error.message);
+      }
+    };
+
+    fetchLessons();
+    fetchCompletedLessons();
   }, [user]);
 
-  const handleComplete = async (lessonId) => {
+  const handleCompletion = async (lessonId, action) => {
     try {
-      await axios.post(`http://localhost:5000/api/lessons/${lessonId}/complete`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      const token = localStorage.getItem("token");
+      await axios.post(`http://localhost:5000/api/lessons/${lessonId}/${action}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      setCompletedLessons(prev => [...prev, lessonId]);
+      setCompletedLessons(prev =>
+        action === "complete"
+          ? [...prev, lessonId]
+          : prev.filter(id => id !== lessonId)
+      );
     } catch (error) {
-      console.error("Error completing lesson:", error);
+      console.error(`❌ Error ${action === "complete" ? "completing" : "uncompleting"} lesson:`, error.response?.data || error.message);
     }
   };
 
-  const completionPercentage = lessons.length
-    ? (completedLessons.length / lessons.length) * 100
-    : 0;
+  const completionPercentage = lessons.length ? (completedLessons.length / lessons.length) * 100 : 0;
 
   return (
     <div className="lessons-container">
@@ -49,7 +71,6 @@ const Lessons = () => {
         </Link>
       )}
 
-      {/* ✅ Progress Bar */}
       {user?.role === "student" && lessons.length > 0 && (
         <div className="progress-bar">
           <div className="progress-fill" style={{ width: `${completionPercentage}%` }}>
@@ -59,7 +80,7 @@ const Lessons = () => {
       )}
 
       <ul className="lesson-list">
-        {lessons.map((lesson) => (
+        {lessons.map(lesson => (
           <li key={lesson._id} className={`lesson-item ${completedLessons.includes(lesson._id) ? "completed" : ""}`}>
             <h3>{lesson.title}</h3>
             <p>{lesson.description}</p>
@@ -67,23 +88,17 @@ const Lessons = () => {
 
             {lesson.videoUrl && (
               <div className="video-container">
-                <iframe
-                  src={lesson.videoUrl}
-                  title={lesson.title}
-                  frameBorder="0"
-                  allowFullScreen
-                ></iframe>
+                <iframe src={lesson.videoUrl} title={lesson.title} frameBorder="0" allowFullScreen></iframe>
               </div>
             )}
 
-            {user?.role === "student" && !completedLessons.includes(lesson._id) && (
-              <button className="complete-btn" onClick={() => handleComplete(lesson._id)}>
-                Mark as Completed
+            {user?.role === "student" && (
+              <button
+                className={completedLessons.includes(lesson._id) ? "uncomplete-btn" : "complete-btn"}
+                onClick={() => handleCompletion(lesson._id, completedLessons.includes(lesson._id) ? "uncomplete" : "complete")}
+              >
+                {completedLessons.includes(lesson._id) ? "❌ Unmark as Completed" : "✅ Mark as Completed"}
               </button>
-            )}
-
-            {user?.role === "student" && completedLessons.includes(lesson._id) && (
-              <p className="completed-text">✅ Completed</p>
             )}
           </li>
         ))}

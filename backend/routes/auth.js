@@ -4,10 +4,44 @@ import { OAuth2Client } from "google-auth-library";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import mongoose from "mongoose";
+import { verifyToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+router.get("/profile", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+// ✅ Update User Profile
+router.put("/profile", verifyToken, async (req, res) => {
+  try {
+    const { name, email } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { name, email },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 // **Google Authentication Route**
 router.post("/google", async (req, res) => {
   try {

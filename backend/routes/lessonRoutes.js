@@ -1,4 +1,4 @@
-import express from "express";
+import express from "express"; 
 import Lesson from "../models/Lesson.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
@@ -19,10 +19,18 @@ const authenticate = (req, res, next) => {
   }
 };
 
-// ✅ Get all lessons
-router.get("/", async (req, res) => {
+// ✅ Get all lessons (Include user completion status)
+router.get("/", authenticate, async (req, res) => {
   try {
     let lessons = await Lesson.find().populate("uploadedBy", "name email");
+
+    if (req.user) {
+      lessons = lessons.map(lesson => ({
+        ...lesson.toObject(),
+        isCompleted: lesson.completedBy.includes(req.user.id),
+      }));
+    }
+
     res.json(lessons);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -59,6 +67,28 @@ router.post("/:lessonId/complete", authenticate, async (req, res) => {
     await lesson.save();
 
     res.json({ message: "Lesson marked as completed!", lessonId });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// ✅ Unmark a lesson as completed
+router.post("/:lessonId/uncomplete", authenticate, async (req, res) => {
+  try {
+    const { lessonId } = req.params;
+    const userId = req.user.id;
+
+    const lesson = await Lesson.findById(lessonId);
+    if (!lesson) return res.status(404).json({ message: "Lesson not found" });
+
+    if (!lesson.completedBy.includes(userId)) {
+      return res.status(400).json({ message: "Lesson is not completed yet" });
+    }
+
+    lesson.completedBy = lesson.completedBy.filter(id => id.toString() !== userId);
+    await lesson.save();
+
+    res.json({ message: "Lesson unmarked as completed!", lessonId });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

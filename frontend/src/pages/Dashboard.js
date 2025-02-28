@@ -10,7 +10,7 @@ const Dashboard = () => {
   const [lessons, setLessons] = useState([]);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Ensure loading is used properly
 
   useEffect(() => {
     if (!user) {
@@ -20,6 +20,8 @@ const Dashboard = () => {
 
     const fetchData = async () => {
       try {
+        setLoading(true); // Start loading
+
         // Fetch lessons
         const lessonsResponse = await fetch("http://localhost:5000/api/lessons");
         const lessonsData = await lessonsResponse.json();
@@ -41,7 +43,7 @@ const Dashboard = () => {
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading after fetching data
       }
     };
 
@@ -64,6 +66,7 @@ const Dashboard = () => {
     navigate("/lessons");
   };
 
+  // ✅ Display loading screen when data is being fetched
   if (loading) {
     return <h2>Loading...</h2>;
   }
@@ -137,7 +140,7 @@ const Dashboard = () => {
       <h3>Upcoming Quizzes</h3>
       <p>Feature coming soon! 🚀</p>
 
-      {/* Chatbot Integration */}
+      {/* ✅ Chatbot Integration */}
       <Chatbot />
     </div>
   );
