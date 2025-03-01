@@ -25,11 +25,9 @@ const Lessons = () => {
     };
 
     const fetchCompletedLessons = async () => {
-      if (!user?._id) return; // Avoid fetching if user is not loaded
-
       try {
         const token = localStorage.getItem("token");
-        const { data } = await axios.get(`http://localhost:5000/api/completed-lessons/${user._id}`, {
+        const { data } = await axios.get("http://localhost:5000/api/lessons/completed-lessons", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCompletedLessons(data);
@@ -40,7 +38,7 @@ const Lessons = () => {
 
     fetchLessons();
     fetchCompletedLessons();
-  }, [user]);
+  }, []);
 
   const handleCompletion = async (lessonId, action) => {
     try {
@@ -90,6 +88,13 @@ const Lessons = () => {
               <div className="video-container">
                 <iframe src={lesson.videoUrl} title={lesson.title} frameBorder="0" allowFullScreen></iframe>
               </div>
+            )}
+
+            {/* Download Notes Button */}
+            {lesson.notesUrl && (
+              <a href={lesson.notesUrl} target="_blank" rel="noopener noreferrer">
+                <button className="download-notes-btn">📄 Download Notes</button>
+              </a>
             )}
 
             {user?.role === "student" && (

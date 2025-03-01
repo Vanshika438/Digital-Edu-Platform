@@ -1,9 +1,13 @@
-/* userAvatar.js */
+* {
+  forced-color-adjust: none;
+}
+
+/* User Avatar */
 .user-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #46b5ff; /* Brownish background */
+  background-color: #46b5ff; /* Light blue background */
   color: white;
   display: flex;
   align-items: center;
@@ -14,7 +18,7 @@
   user-select: none;
 }
 
-/* Home.js */
+/* Home Page */
 .home-container {
   text-align: center;
   padding: 2em;
@@ -52,11 +56,12 @@
   border-radius: 25px;
   font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
 }
 
 .home-button:hover {
   background-color: #2980b9;
+  transform: scale(1.05); /* Slight scale-up on hover */
 }
 
 .register {
@@ -66,27 +71,25 @@
 .register:hover {
   background-color: #27ae60;
 }
-/* Styles for the heading */
+
+/* Dashboard */
 .dashboard-container h2 {
   text-align: center;
   color: #333;
   margin-bottom: 1em;
 }
 
-/* Styles for the subheadings */
 .dashboard-container h3 {
   color: #333;
   margin-bottom: 0.5em;
 }
 
-/* Styles for the paragraphs */
 .dashboard-container p {
   font-size: 1.2em;
   color: #666;
   margin-bottom: 1em;
 }
 
-/* Styles for the quick actions */
 .quick-actions {
   display: flex;
   justify-content: space-around;
@@ -101,10 +104,12 @@
   color: white;
   font-size: 1em;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .quick-actions button:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 .logout-btn {
@@ -115,7 +120,7 @@
   background-color: #c9302c;
 }
 
-/* Styles for the progress bar */
+/* Progress Bar */
 .progress-bar {
   width: 100%;
   background-color: #eee;
@@ -131,9 +136,10 @@
   text-align: center;
   line-height: 20px;
   border-radius: 5px 0 0 5px;
+  transition: width 0.5s ease-in-out;
 }
 
-/* Styles for the list of lessons */
+/* Lessons */
 .lesson-list {
   display: flex;
   flex-wrap: wrap;
@@ -176,39 +182,225 @@
   height: 100%;
   border: none;
 }
-/* Progress Bar */
-.progress-bar {
-  width: 100%;
-  background-color: #eee;
-  border-radius: 5px;
-  overflow: hidden;
-  margin: 1em 0;
+
+/* Download Notes Button */
+.download-notes-btn {
+  background-color: #2c3e50; /* Navy blue background */
+  color: white; /* White text */
+  font-family: 'Helvetica', 'Arial', sans-serif; /* Clean font */
+  padding: 10px 20px; /* Padding for size */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
 }
 
-.progress-fill {
-  height: 20px;
+.download-notes-btn:hover {
+  background-color: #34495e; /* Slightly darker on hover */
+  transform: scale(1.05); /* Slight increase in size on hover */
+}
+
+/* Mark as Completed Button */
+.complete-btn {
+  background-color: #2ecc71; /* Classic green background */
+  color: white; /* White text */
+  font-family: 'Helvetica', 'Arial', sans-serif; /* Clean font */
+  padding: 10px 20px; /* Padding for size */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
+}
+
+.complete-btn:hover {
+  background-color: #27ae60; /* Slightly darker on hover */
+  transform: scale(1.05); /* Slight increase in size on hover */
+}
+
+/* Unmark as Completed Button */
+.uncomplete-btn {
+  background-color: #e74c3c; /* Classic red background */
+  color: white; /* White text */
+  font-family: 'Helvetica', 'Arial', sans-serif; /* Clean font */
+  padding: 10px 20px; /* Padding for size */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
+}
+
+.uncomplete-btn:hover {
+  background-color: #c0392b; /* Slightly darker on hover */
+  transform: scale(1.05); /* Slight increase in size on hover */
+}
+/* Playlists Container */
+.playlists-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+/* Playlist Controls */
+.playlist-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.navigate-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.navigate-button:hover {
+  background-color: #0056b3;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 100px;
+}
+
+button {
   background-color: #28a745;
   color: white;
-  text-align: center;
-  line-height: 20px;
-  border-radius: 5px 0 0 5px;
-  transition: width 0.5s ease-in-out;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-/* Mark completed lessons */
-.lesson-item.completed {
-  background-color: #dff0d8;
-  border-color: #d6e9c6;
+button:hover {
+  background-color: #218838;
 }
 
-.completed-text {
-  color: green;
-  font-weight: bold;
-  margin-top: 10px;
+/* Playlists List */
+.playlist-list {
+  list-style-type: none;
+  padding: 0;
 }
+
+.playlist-item {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.playlist-item h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #343a40;
+}
+
+.playlist-item p {
+  margin: 5px 0;
+  color: #6c757d;
+}
+
+/* Lesson List */
+.lesson-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.lesson-item {
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  padding: 10px;
+}
+
+.lesson-item h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #495057;
+}
+
+video {
+  display: block;
+  margin-top: 5px;
+  border-radius: 4px;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .playlists-container {
+      padding: 10px;
+  }
+
+  .playlist-controls {
+      flex-direction: column;
+      gap: 5px;
+  }
+
+  input[type="text"],
+  select,
+  button {
+      width: 100%;
+  }
+}
+
+
 /* Responsive Styles */
 @media (max-width: 768px) {
-  /* General Layout */
+  .playlists-container {
+    max-width: 90%;
+    padding: 1.5em;
+  }
+
+  .playlist-controls input[type="text"],
+  .playlist-controls select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .playlists-container h2 {
+    font-size: 2em;
+  }
+
+  .playlist-item h3 {
+    font-size: 1.2em;
+  }
+
+  .playlist-item p {
+    font-size: 0.9em;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
   .home-container, .dashboard-container {
     max-width: 90%;
     padding: 1.5em;
@@ -231,7 +423,6 @@
     width: 100%;
   }
 
-  /* Navbar Adjustments */
   .navbar {
     flex-direction: column;
     padding: 1em;
@@ -247,14 +438,12 @@
     margin: 5px 0;
   }
 
-  /* User Avatar */
   .user-avatar {
     width: 35px;
     height: 35px;
     font-size: 16px;
   }
 
-  /* Dashboard Adjustments */
   .quick-actions {
     flex-direction: column;
     gap: 10px;
@@ -265,7 +454,6 @@
     width: 80%;
   }
 
-  /* Lessons List */
   .lesson-list {
     flex-direction: column;
     align-items: center;
@@ -280,7 +468,6 @@
     height: 150px;
   }
 
-  /* Progress Bar */
   .progress-bar {
     height: 15px;
   }

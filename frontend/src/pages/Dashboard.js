@@ -10,7 +10,7 @@ const Dashboard = () => {
   const [lessons, setLessons] = useState([]);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
-  const [loading, setLoading] = useState(true); // Ensure loading is used properly
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
@@ -20,30 +20,41 @@ const Dashboard = () => {
 
     const fetchData = async () => {
       try {
-        setLoading(true); // Start loading
+        setLoading(true);
+        const token = localStorage.getItem("token");
 
-        // Fetch lessons
-        const lessonsResponse = await fetch("http://localhost:5000/api/lessons");
+        // Fetch lessons with authentication
+        const lessonsResponse = await fetch("http://localhost:5000/api/lessons", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
         const lessonsData = await lessonsResponse.json();
         setLessons(Array.isArray(lessonsData) ? lessonsData : []);
 
-        // Fetch completed lessons
-        const completedResponse = await fetch(`http://localhost:5000/api/completed-lessons/${user.id}`, {
-          credentials: "include",
-        });
-        if (completedResponse.ok) {
-          const completedData = await completedResponse.json();
-          setCompletedLessons(Array.isArray(completedData) ? completedData : []);
+        // Fetch completed lessons if user.id exists
+        if (user.id) {
+          const completedResponse = await fetch(`http://localhost:5000/api/completed-lessons/${user.id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (completedResponse.ok) {
+            const completedData = await completedResponse.json();
+            setCompletedLessons(Array.isArray(completedData) ? completedData : []);
+          }
         }
 
         // Fetch announcements
-        const announcementsResponse = await fetch("http://localhost:5000/api/announcements");
+        const announcementsResponse = await fetch("http://localhost:5000/api/announcements", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
         const announcementsData = await announcementsResponse.json();
         setAnnouncements(Array.isArray(announcementsData) ? announcementsData : []);
+
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
-        setLoading(false); // Stop loading after fetching data
+        setLoading(false);
       }
     };
 
@@ -52,9 +63,7 @@ const Dashboard = () => {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 18) return "Good Afternoon";
-    return "Good Evening";
+    return hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
   };
 
   const handleLogout = () => {
@@ -62,31 +71,21 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  const handleSeeMore = () => {
-    navigate("/lessons");
-  };
-
-  // ✅ Display loading screen when data is being fetched
-  if (loading) {
-    return <h2>Loading...</h2>;
-  }
-
-  // Calculate progress percentage
   const progress = lessons.length > 0 ? (completedLessons.length / lessons.length) * 100 : 0;
+
+  if (loading) return <h2>Loading...</h2>;
 
   return (
     <div className="dashboard-container">
       <h2>{getGreeting()}, {user?.name || "Student"}!</h2>
       <p>Welcome back to your learning!</p>
 
-      {/* ✅ Quick Actions */}
       <div className="quick-actions">
         <button onClick={() => navigate("/lessons")}>📚 Start a Lesson</button>
         <button onClick={() => navigate("/lessons?last=true")}>⏳ Resume Last Lesson</button>
         <button className="logout-btn" onClick={handleLogout}>🚪 Logout</button>
       </div>
 
-      {/* ✅ Progress Tracking */}
       <h3>Your Progress</h3>
       <div className="progress-bar">
         <div className="progress-fill" style={{ width: `${progress}%` }}>
@@ -94,25 +93,15 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* ✅ Available Lessons with Videos */}
       <h3>Available Lessons</h3>
-      {lessons.length === 0 ? (
-        <p>No lessons available yet.</p>
-      ) : (
+      {lessons.length === 0 ? <p>No lessons available yet.</p> : (
         <ul className="lesson-list">
           {lessons.slice(0, 3).map((lesson) => (
             <li key={lesson._id} className={`lesson-item ${completedLessons.includes(lesson._id) ? "completed" : ""}`}>
               <strong>{lesson.title}</strong> - {lesson.teacher}
-              
-              {/* ✅ Display Video */}
               {lesson.videoUrl && (
                 <div className="video-container">
-                  <iframe
-                    src={lesson.videoUrl}
-                    title={lesson.title}
-                    frameBorder="0"
-                    allowFullScreen
-                  ></iframe>
+                  <iframe src={lesson.videoUrl} title={lesson.title} frameBorder="0" allowFullScreen></iframe>
                 </div>
               )}
             </li>
@@ -120,13 +109,10 @@ const Dashboard = () => {
         </ul>
       )}
 
-      <button className="see-more-button" onClick={handleSeeMore}>See More Lessons</button>
+      <button className="see-more-button" onClick={() => navigate("/lessons")}>See More Lessons</button>
 
-      {/* ✅ Announcements */}
       <h3>Latest Announcements</h3>
-      {announcements.length === 0 ? (
-        <p>No announcements yet.</p>
-      ) : (
+      {announcements.length === 0 ? <p>No announcements yet.</p> : (
         <ul className="announcement-list">
           {announcements.map((announcement) => (
             <li key={announcement._id} className="announcement-item">
@@ -136,11 +122,9 @@ const Dashboard = () => {
         </ul>
       )}
 
-      {/* ✅ Upcoming Features */}
       <h3>Upcoming Quizzes</h3>
       <p>Feature coming soon! 🚀</p>
 
-      {/* ✅ Chatbot Integration */}
       <Chatbot />
     </div>
   );

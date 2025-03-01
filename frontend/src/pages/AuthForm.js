@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"; 
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import AuthContext from "../context/AuthContext";
@@ -11,37 +11,21 @@ const AuthForm = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (isRegister) {
-            try {
-                const response = await axios.post("http://localhost:5000/auth/register", {
-                    name,
-                    email,
-                    password,
-                });
-
+        try {
+            if (isRegister) {
+                await axios.post("http://localhost:5000/auth/register", { name, email, password });
                 alert("Registration successful!");
-                console.log("Response:", response.data);
-
-                // ✅ Instead of setTimeout, wait for the user to be set
                 loginWithUsernamePassword(email, password, navigate);
-            } catch (error) {
-                console.error("Error registering:", error);
-                alert("Error: " + (error.response?.data.message || "Network Error! Check backend."));
-            }
-        } else {
-            try {
-                // ✅ Use loginWithUsernamePassword function
+            } else {
                 loginWithUsernamePassword(email, password, navigate);
-            } catch (error) {
-                console.error("Error logging in:", error);
-                alert("Login failed! " + (error.response?.data.message || "Network Error! Check backend."));
             }
+        } catch (error) {
+            console.error("Error:", error);
+            alert(error.response?.data.message || "Network Error! Check backend.");
         }
     };
 
@@ -80,25 +64,17 @@ const AuthForm = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button type="submit" className="btn btn-full">
-                    {isRegister ? "Register" : "Login"}
-                </button>
+                <button type="submit" className="btn btn-full">{isRegister ? "Register" : "Login"}</button>
             </form>
 
             {!isRegister && (
                 <>
                     <div className="separator">or</div>
                     <GoogleLogin
-                        onSuccess={async (credentialResponse) => {
-                            try {
-                                console.log("Google Login:", credentialResponse);
-                                loginWithGoogle(credentialResponse.credential, navigate);
-                            } catch (error) {
-                                console.error("Google Login Failed:", error);
-                                alert("Google login failed.");
-                            }
+                        onSuccess={(credentialResponse) => {
+                            loginWithGoogle(credentialResponse.credential, navigate);
                         }}
-                        onError={() => console.error("Google Login Failed")}
+                        onError={() => alert("Google Login Failed")}
                     />
                 </>
             )}

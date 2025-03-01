@@ -1,4 +1,4 @@
-import express from "express"; 
+import express from "express";
 import Lesson from "../models/Lesson.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
@@ -38,9 +38,9 @@ router.get("/", authenticate, async (req, res) => {
 });
 
 // ✅ Get completed lessons for a user
-router.get("/:userId/completed-lessons", authenticate, async (req, res) => {
+router.get("/completed-lessons", authenticate, async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const completedLessons = await Lesson.find({ completedBy: user._id }).select("_id");
@@ -54,17 +54,17 @@ router.get("/:userId/completed-lessons", authenticate, async (req, res) => {
 router.post("/:lessonId/complete", authenticate, async (req, res) => {
   try {
     const { lessonId } = req.params;
-    const userId = req.user.id;
+    const user = await User.findById(req.user.id);
 
-    const lesson = await Lesson.findById(lessonId);
-    if (!lesson) return res.status(404).json({ message: "Lesson not found" });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (lesson.completedBy.includes(userId)) {
-      return res.status(400).json({ message: "Already completed" });
+    // ✅ Prevent duplicate completions
+    if (user.completedLessons.includes(lessonId)) {
+      return res.status(400).json({ message: "Lesson already completed" });
     }
 
-    lesson.completedBy.push(userId);
-    await lesson.save();
+    user.completedLessons.push(lessonId);
+    await user.save();
 
     res.json({ message: "Lesson marked as completed!", lessonId });
   } catch (error) {

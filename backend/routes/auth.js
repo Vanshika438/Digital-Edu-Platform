@@ -22,9 +22,12 @@ router.get("/profile", verifyToken, async (req, res) => {
   }
 });
 
-// ✅ Update User Profile
+//  Update User Profile
 router.put("/profile", verifyToken, async (req, res) => {
   try {
+    console.log("🔹 Update profile request received:", req.body);
+    console.log("🔹 User ID from token:", req.user.id);
+
     const { name, email } = req.body;
 
     const user = await User.findByIdAndUpdate(
@@ -34,14 +37,19 @@ router.put("/profile", verifyToken, async (req, res) => {
     ).select("-password");
 
     if (!user) {
+      console.log("❌ User not found");
       return res.status(404).json({ message: "User not found" });
     }
 
+    console.log("✅ Profile updated:", user);
     res.json(user);
   } catch (error) {
+    console.error("❌ Server error:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
+
+
 // **Google Authentication Route**
 router.post("/google", async (req, res) => {
   try {

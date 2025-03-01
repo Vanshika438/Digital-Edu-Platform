@@ -76,5 +76,5 @@ async function seedLessons() {
     console.error("❌ Error seeding lessons:", error);
   }
 }
-
+// playlist.lessons = playlist.lessons || [];
 export default seedLessons;

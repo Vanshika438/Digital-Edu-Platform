@@ -10,7 +10,7 @@ import lessonRoutes from "./routes/lessonRoutes.js";
 import seedLessons from "./seedLessons.js";
 import chatbotRoutes from "./routes/chatbot.js";
 import announcementRoutes from "./routes/announcementRoutes.js";
-
+import playlistRoutes from "./routes/playlistRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -50,11 +50,13 @@ const startServer = async () => {
     await seedLessons();
 
     // Register Routes
-    app.use("/api", testRoutes);
+    app.use("/api/tests", testRoutes);
     app.use("/auth", authRoutes);
     app.use("/api/lessons", lessonRoutes);
-    app.use("/api/chatbot", chatbotRoutes); 
+    app.use("/api/chatbot", chatbotRoutes);
+    app.use("/api/playlists", playlistRoutes); // ✅ Fixed route registration
     app.use("/api/announcements", announcementRoutes);
+
     // Start server
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
