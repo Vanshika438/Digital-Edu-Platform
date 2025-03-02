@@ -36,9 +36,12 @@ const Lessons = () => {
       }
     };
 
-    fetchLessons();
-    fetchCompletedLessons();
-  }, []);
+    // Fetch lessons and completed lessons only if the user is logged in
+    if (user) {
+      fetchLessons();
+      fetchCompletedLessons();
+    }
+  }, [user]); // This will run when the user changes
 
   const handleCompletion = async (lessonId, action) => {
     try {
@@ -47,11 +50,12 @@ const Lessons = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setCompletedLessons(prev =>
-        action === "complete"
-          ? [...prev, lessonId]
-          : prev.filter(id => id !== lessonId)
-      );
+      const newCompletedLessons = action === "complete"
+        ? [...completedLessons, lessonId]
+        : completedLessons.filter(id => id !== lessonId);
+
+      setCompletedLessons(newCompletedLessons);
+      localStorage.setItem("completedLessons", JSON.stringify(newCompletedLessons)); // Persist in localStorage
     } catch (error) {
       console.error(`❌ Error ${action === "complete" ? "completing" : "uncompleting"} lesson:`, error.response?.data || error.message);
     }

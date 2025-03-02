@@ -1,5 +1,5 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { Routes, Route } from "react-router-dom"; // ❌ No need for BrowserRouter here
+import { Routes, Route } from "react-router-dom"; 
 import Home from "./pages/Home";
 import AuthForm from "./pages/AuthForm";
 import Dashboard from "./pages/Dashboard";

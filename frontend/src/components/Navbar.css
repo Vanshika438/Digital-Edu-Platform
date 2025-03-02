@@ -105,13 +105,13 @@
 
 /* Dropdown Menu */
 .avatar-container {
-  position: relative; /* Needed for dropdown positioning */
+  position: relative; 
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 60px; /* Position below the avatar */
-  right: 0; /* Align to the right edge of the container */
+  top: 60px; 
+  right: 0; 
   background-color: #fff;
   color: #333;
   border: 1px solid #ddd;

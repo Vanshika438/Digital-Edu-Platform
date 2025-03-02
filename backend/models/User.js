@@ -4,15 +4,10 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String },
-  role: { type: String, enum: ["student", "teacher"], default: "student" }, // New role field
-  completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }], // Track completed lessons
-  lastViewedLesson: { type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }, // Store last viewed lesson
-  playlists: [
-    {
-      name: String,
-      lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
-    },
-  ],
+  role: { type: String, enum: ["student", "teacher"], default: "student" },
+  completedLessons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
+  lastViewedLesson: { type: mongoose.Schema.Types.ObjectId, ref: "Lesson" },
+  playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "Playlist" }],
 });
 
 const User = mongoose.model("User", userSchema);

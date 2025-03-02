@@ -11,6 +11,7 @@ import seedLessons from "./seedLessons.js";
 import chatbotRoutes from "./routes/chatbot.js";
 import announcementRoutes from "./routes/announcementRoutes.js";
 import playlistRoutes from "./routes/playlistRoutes.js";
+import { protect } from "./middleware/authMiddleware.js"; // Correct import
 
 dotenv.config();
 const app = express();
@@ -47,7 +48,7 @@ const startServer = async () => {
     console.log("✅ MongoDB Connected");
 
     // Seed default lessons
-    await seedLessons();
+    // await seedLessons();
 
     // Register Routes
     app.use("/api/tests", testRoutes);
@@ -56,9 +57,9 @@ const startServer = async () => {
     app.use("/api/chatbot", chatbotRoutes);
     app.use("/api/playlists", playlistRoutes); // ✅ Fixed route registration
     app.use("/api/announcements", announcementRoutes);
-
+  
     // Start server
-    const PORT = process.env.PORT || 5000;
+    const PORT = process.env.PORT || 5000; 
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   } catch (err) {
     console.error("❌ MongoDB Connection Error:", err);

@@ -17,8 +17,12 @@ async function seedLessons() {
       useUnifiedTopology: true,
     });
 
-    const existingLessons = await Lesson.find();
-    await Lesson.deleteMany({});
+    // ✅ Check if lessons already exist
+    const existingLessons = await Lesson.countDocuments();
+    if (existingLessons > 0) {
+      console.log("✅ Lessons already exist. Skipping seeding.");
+      return; // ✅ Prevents deleting & recreating lessons
+    }
 
     let teacher = await User.findOne({ role: "teacher" });
 
@@ -72,9 +76,10 @@ async function seedLessons() {
     ];
 
     await Lesson.insertMany(lessons);
+    console.log("✅ Default lessons seeded successfully!");
   } catch (error) {
     console.error("❌ Error seeding lessons:", error);
   }
 }
-// playlist.lessons = playlist.lessons || [];
+
 export default seedLessons;
