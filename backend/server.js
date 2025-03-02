@@ -46,10 +46,6 @@ const startServer = async () => {
     });
 
     console.log("✅ MongoDB Connected");
-
-    // Seed default lessons
-    // await seedLessons();
-
     // Register Routes
     app.use("/api/tests", testRoutes);
     app.use("/auth", authRoutes);
@@ -57,9 +53,9 @@ const startServer = async () => {
     app.use("/api/chatbot", chatbotRoutes);
     app.use("/api/playlists", playlistRoutes); // ✅ Fixed route registration
     app.use("/api/announcements", announcementRoutes);
-  
+
     // Start server
-    const PORT = process.env.PORT || 5000; 
+    const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   } catch (err) {
     console.error("❌ MongoDB Connection Error:", err);

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
-import "./Navbar.css"; // Applying new styles
+import "./Navbar.css"; 
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
-  const [dropdownOpen, setDropdownOpen] = useState(false); // ✅ Track dropdown state
+  const [dropdownOpen, setDropdownOpen] = useState(false); 
 
   // Get the first letter of the user's name (fallback to "U" if no name)
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";

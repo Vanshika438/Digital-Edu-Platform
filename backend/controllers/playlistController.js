@@ -1,6 +1,7 @@
-import Playlist from "../models/Playlist.js"; // Import Playlist schema
-import Lesson from "../models/Lesson.js"; // Import Lesson schema
-import User from "../models/User.js"; // Import User schema
+// Import schemas
+import Playlist from "../models/Playlist.js";  
+import Lesson from "../models/Lesson.js"; 
+import User from "../models/User.js";
 // Create a new playlist
 export const createPlaylist = async (req, res) => {
     try {

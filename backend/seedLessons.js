@@ -17,11 +17,11 @@ async function seedLessons() {
       useUnifiedTopology: true,
     });
 
-    // ✅ Check if lessons already exist
+    // Check if lessons already exist
     const existingLessons = await Lesson.countDocuments();
     if (existingLessons > 0) {
       console.log("✅ Lessons already exist. Skipping seeding.");
-      return; // ✅ Prevents deleting & recreating lessons
+      return; // 
     }
 
     let teacher = await User.findOne({ role: "teacher" });
