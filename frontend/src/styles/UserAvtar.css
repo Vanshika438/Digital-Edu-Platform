@@ -1,0 +1,72 @@
+/* UserAvatar.css */
+.user-avatar-container {
+  position: relative;
+  display: inline-block;
+  width: auto; /* Ensure the container doesn't constrain the dropdown */
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #46b5ff; /* Light blue background */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  user-select: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 50px; /* Adjust based on your layout */
+  right: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  min-width: 200px; /* Increased width to ensure text fits */
+  width: max-content; /* Ensures the dropdown expands to fit content */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+}
+
+.user-dropdown button {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 14px;
+  text-align: left;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap; /* Prevents text from breaking into multiple lines */
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between icon and text */
+}
+
+.user-dropdown button:hover {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+/* Responsive Styles for UserAvatar */
+@media (max-width: 768px) {
+  .user-dropdown {
+    top: 40px; /* Adjust for smaller screens */
+    right: -10px; /* Adjust for smaller screens */
+  }
+}

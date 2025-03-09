@@ -62,25 +62,35 @@ export const deletePlaylist = async (req, res) => {
             return res.status(403).json({ message: "You are not authorized to delete this playlist" });
         }
 
-        // Remove the playlist from the user's `playlists` array
+        // Find the user and make sure `playlists` is defined
         const user = await User.findById(req.user._id);
         if (!user) {
             console.error("User not found:", req.user._id);
             return res.status(404).json({ message: "User not found" });
         }
 
+        if (!user.playlists) {
+            user.playlists = []; // ✅ Initialize playlists if undefined
+        }
+
+        // Remove the playlist from user's `playlists` array
         user.playlists = user.playlists.filter(id => id.toString() !== playlistId);
         await user.save();
 
         // Delete the playlist from the database
         await Playlist.findByIdAndDelete(playlistId);
 
+        // ✅ Fetch updated list of playlists after deletion
+        const updatedPlaylists = await Playlist.find({ user: req.user._id })
+            .populate("lessons", "title videoUrl description");
+
         console.log("Playlist deleted successfully:", playlistId);
-        res.json({ message: "Playlist deleted successfully" });
+        res.json({ message: "Playlist deleted successfully", playlists: updatedPlaylists });
 
     } catch (error) {
         console.error("Error deleting playlist:", error.message);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 

@@ -1,0 +1,179 @@
+/* Dashboard.css */
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.dashboard-container h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #4CAF50;
+}
+
+.dashboard-container p {
+  text-align: center;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.quick-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.quick-actions button {
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.quick-actions button:hover {
+  background-color: #1e88e5;
+  transform: scale(1.05);
+}
+
+.quick-actions .logout-btn {
+  background-color: #f44336;
+}
+
+.quick-actions .logout-btn:hover {
+  background-color: #e53935;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  font-weight: bold;
+  transition: width 0.3s ease;
+}
+
+/* Card Layout for Lessons and Announcements */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.card.completed {
+  background-color: #e8f5e9;
+  border-color: #c8e6c9;
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.card p {
+  color: #555;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  margin: 15px 0;
+  border-radius: 5px;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.see-more-button {
+  display: block;
+  margin: 0 auto 30px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.see-more-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Announcement Cards */
+.announcement-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.announcement-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.announcement-card h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #2196F3;
+}
+
+.announcement-card p {
+  color: #555;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* Chatbot Styling */
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}

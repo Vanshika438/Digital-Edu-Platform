@@ -2,12 +2,15 @@ import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
-import "../styles/style.css";
+import "../styles/Lesson.css";
+
+const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY; // ✅ Add YouTube API key
 
 const Lessons = () => {
   const [lessons, setLessons] = useState([]);
   const [completedLessons, setCompletedLessons] = useState([]);
   const { user } = useContext(AuthContext);
+  const [videoProgress, setVideoProgress] = useState({}); // Store last watched time
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -27,7 +30,7 @@ const Lessons = () => {
     const fetchCompletedLessons = async () => {
       try {
         const token = localStorage.getItem("token");
-        const { data } = await axios.get("http://localhost:5000/api/lessons/completed-lessons", {
+        const { data } = await axios.get("http://localhost:5000/api/users/completed-lessons", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCompletedLessons(data);
@@ -36,29 +39,70 @@ const Lessons = () => {
       }
     };
 
-    // Fetch lessons and completed lessons only if the user is logged in
     if (user) {
       fetchLessons();
       fetchCompletedLessons();
+      loadVideoProgress();
     }
-  }, [user]); // This will run when the user changes
+  }, [user]);
 
-  const handleCompletion = async (lessonId, action) => {
+  const loadVideoProgress = () => {
+    const storedProgress = JSON.parse(localStorage.getItem("videoProgress")) || {};
+    setVideoProgress(storedProgress);
+  };
+
+  const saveProgress = async (lessonId, time) => {
+    const newProgress = { ...videoProgress, [lessonId]: time };
+    setVideoProgress(newProgress);
+    localStorage.setItem("videoProgress", JSON.stringify(newProgress));
+
     try {
       const token = localStorage.getItem("token");
-      await axios.post(`http://localhost:5000/api/lessons/${lessonId}/${action}`, {}, {
+      await axios.post("http://localhost:5000/api/users/progress", { lessonId, time }, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      const newCompletedLessons = action === "complete"
-        ? [...completedLessons, lessonId]
-        : completedLessons.filter(id => id !== lessonId);
-
-      setCompletedLessons(newCompletedLessons);
-      localStorage.setItem("completedLessons", JSON.stringify(newCompletedLessons)); // Persist in localStorage
     } catch (error) {
-      console.error(`❌ Error ${action === "complete" ? "completing" : "uncompleting"} lesson:`, error.response?.data || error.message);
+      console.error("❌ Error saving progress:", error.response?.data || error.message);
     }
+  };
+
+  useEffect(() => {
+    if (window.YT) {
+      loadYouTubeAPI();
+    } else {
+      const tag = document.createElement("script");
+      tag.src = `https://www.youtube.com/iframe_api?key=${YOUTUBE_API_KEY}`; // ✅ Include API key
+      tag.onload = loadYouTubeAPI;
+      document.body.appendChild(tag);
+    }
+  }, [lessons]);
+
+  const loadYouTubeAPI = () => {
+    lessons.forEach((lesson) => {
+      if (lesson.videoUrl) {
+        new window.YT.Player(`youtube-player-${lesson._id}`, {
+          events: {
+            onStateChange: (event) => {
+              if (event.data === window.YT.PlayerState.PLAYING) {
+                const interval = setInterval(async () => {
+                  const currentTime = event.target.getCurrentTime();
+                  saveProgress(lesson._id, currentTime);
+                }, 5000);
+                event.target.interval = interval;
+              }
+              if (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) {
+                clearInterval(event.target.interval);
+              }
+            },
+            onReady: (event) => {
+              if (videoProgress[lesson._id]) {
+                event.target.seekTo(videoProgress[lesson._id]);
+              }
+            }
+          }
+        });
+      }
+    });
   };
 
   const completionPercentage = lessons.length ? (completedLessons.length / lessons.length) * 100 : 0;
@@ -81,37 +125,33 @@ const Lessons = () => {
         </div>
       )}
 
-      <ul className="lesson-list">
+      <div className="lesson-grid">
         {lessons.map(lesson => (
-          <li key={lesson._id} className={`lesson-item ${completedLessons.includes(lesson._id) ? "completed" : ""}`}>
+          <div key={lesson._id} className={`lesson-card ${completedLessons.includes(lesson._id) ? "completed" : ""}`}>
             <h3>{lesson.title}</h3>
             <p>{lesson.description}</p>
             <p><strong>Uploaded by:</strong> {lesson.uploadedBy?.name || "Unknown"}</p>
 
             {lesson.videoUrl && (
               <div className="video-container">
-                <iframe src={lesson.videoUrl} title={lesson.title} frameBorder="0" allowFullScreen></iframe>
+                <iframe
+                  id={`youtube-player-${lesson._id}`}
+                  src={`${lesson.videoUrl}?enablejsapi=1&key=${YOUTUBE_API_KEY}`}
+                  title={lesson.title}
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
               </div>
             )}
 
-            {/* Download Notes Button */}
             {lesson.notesUrl && (
               <a href={lesson.notesUrl} target="_blank" rel="noopener noreferrer">
                 <button className="download-notes-btn">📄 Download Notes</button>
               </a>
             )}
-
-            {user?.role === "student" && (
-              <button
-                className={completedLessons.includes(lesson._id) ? "uncomplete-btn" : "complete-btn"}
-                onClick={() => handleCompletion(lesson._id, completedLessons.includes(lesson._id) ? "uncomplete" : "complete")}
-              >
-                {completedLessons.includes(lesson._id) ? "❌ Unmark as Completed" : "✅ Mark as Completed"}
-              </button>
-            )}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

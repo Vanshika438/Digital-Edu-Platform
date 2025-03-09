@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../styles/style.css";
+// import Lessons from "./Lessons";
+import "../styles/Dashboard.css";
 import Chatbot from "./Chatbot"; // Import the Chatbot component
 
 const Dashboard = () => {
@@ -77,56 +78,61 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h2>{getGreeting()}, {user?.name || "Student"}!</h2>
-      <p>Welcome back to your learning!</p>
+  <h2>{getGreeting()}, {user?.name || "Student"}!</h2>
+  <p>Welcome back to your learning!</p>
 
-      <div className="quick-actions">
-        <button onClick={() => navigate("/lessons")}>📚 Start a Lesson</button>
-        <button onClick={() => navigate("/lessons?last=true")}>⏳ Resume Last Lesson</button>
-        <button className="logout-btn" onClick={handleLogout}>🚪 Logout</button>
-      </div>
+  <div className="quick-actions">
+    <button onClick={() => navigate("/lessons")}>📚 Start a Lesson</button>
+    <button onClick={() => navigate("/lessons?last=true")}>⏳ Resume Last Lesson</button>
+    <button className="logout-btn" onClick={handleLogout}>🚪 Logout</button>
+  </div>
 
-      <h3>Your Progress</h3>
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: `${progress}%` }}>
-          {Math.round(progress)}%
-        </div>
-      </div>
-
-      <h3>Available Lessons</h3>
-      {lessons.length === 0 ? <p>No lessons available yet.</p> : (
-        <ul className="lesson-list">
-          {lessons.slice(0, 3).map((lesson) => (
-            <li key={lesson._id} className={`lesson-item ${completedLessons.includes(lesson._id) ? "completed" : ""}`}>
-              <strong>{lesson.title}</strong> - {lesson.teacher}
-              {lesson.videoUrl && (
-                <div className="video-container">
-                  <iframe src={lesson.videoUrl} title={lesson.title} frameBorder="0" allowFullScreen></iframe>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <button className="see-more-button" onClick={() => navigate("/lessons")}>See More Lessons</button>
-
-      <h3>Latest Announcements</h3>
-      {announcements.length === 0 ? <p>No announcements yet.</p> : (
-        <ul className="announcement-list">
-          {announcements.map((announcement) => (
-            <li key={announcement._id} className="announcement-item">
-              <strong>{announcement.title}</strong>: {announcement.message}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <h3>Upcoming Quizzes</h3>
-      <p>Feature coming soon! 🚀</p>
-
-      <Chatbot />
+  <h3>Your Progress</h3>
+  <div className="progress-bar">
+    <div className="progress-fill" style={{ width: `${progress}%` }}>
+      {Math.round(progress)}%
     </div>
+  </div>
+
+  <h3>Available Lessons</h3>
+  {lessons.length === 0 ? (
+    <p>No lessons available yet.</p>
+  ) : (
+    <div className="card-grid">
+      {lessons.slice(0, 3).map((lesson) => (
+        <div key={lesson._id} className={`card ${completedLessons.includes(lesson._id) ? "completed" : ""}`}>
+          <h3>{lesson.title}</h3>
+          <p>By: {lesson.teacher}</p>
+          {lesson.videoUrl && (
+            <div className="video-container">
+              <iframe src={lesson.videoUrl} title={lesson.title} frameBorder="0" allowFullScreen></iframe>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )}
+
+  <button className="see-more-button" onClick={() => navigate("/lessons")}>See More Lessons</button>
+
+  <h3>Latest Announcements</h3>
+  {announcements.length === 0 ? (
+    <p>No announcements yet.</p>
+  ) : (
+    <div className="card-grid">
+      {announcements.map((announcement) => (
+        <div key={announcement._id} className="announcement-card">
+          <h3>{announcement.title}</h3>
+          <p>{announcement.message}</p>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <h3>Upcoming Quizzes</h3>
+  <p>Feature coming soon! 🚀</p>
+    <Chatbot />
+</div>
   );
 };
 

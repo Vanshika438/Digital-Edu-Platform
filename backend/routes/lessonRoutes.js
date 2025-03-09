@@ -19,15 +19,16 @@ const authenticate = (req, res, next) => {
   }
 };
 
-// ✅ Get all lessons (Include user completion status)
+// ✅ Get all lessons (Include user progress)
 router.get("/", authenticate, async (req, res) => {
   try {
     let lessons = await Lesson.find().populate("uploadedBy", "name email");
 
     if (req.user) {
+      const user = await User.findById(req.user.id);
       lessons = lessons.map(lesson => ({
         ...lesson.toObject(),
-        isCompleted: lesson.completedBy.includes(req.user.id),
+        isWatched: user?.recentVideos?.some(video => video.lesson.toString() === lesson._id.toString()),
       }));
     }
 
@@ -37,60 +38,55 @@ router.get("/", authenticate, async (req, res) => {
   }
 });
 
-// ✅ Get completed lessons for a user
-router.get("/completed-lessons", authenticate, async (req, res) => {
+// ✅ Track Lesson Watch Progress
+router.post("/:lessonId/watch", authenticate, async (req, res) => {
+  try {
+    const { lessonId } = req.params;
+    const user = await User.findById(req.user.id);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // ✅ Store recently watched lessons (limit to last 10)
+    user.recentVideos = user.recentVideos.filter(video => video.lesson.toString() !== lessonId);
+    user.recentVideos.unshift({ lesson: lessonId, watchedAt: new Date() });
+
+    if (user.recentVideos.length > 10) {
+      user.recentVideos.pop();
+    }
+
+    await user.save();
+
+    res.json({ message: "Lesson watch progress updated!", lessonId });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// ✅ Get User Progress
+router.get("/progress", authenticate, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const completedLessons = await Lesson.find({ completedBy: user._id }).select("_id");
-    res.json(completedLessons.map(lesson => lesson._id)); // Return only lesson IDs
+    const watchedLessons = user.recentVideos.map(video => video.lesson.toString());
+    const totalLessons = await Lesson.countDocuments();
+    const progress = totalLessons ? (watchedLessons.length / totalLessons) * 100 : 0;
+
+    res.json({ watchedLessons: watchedLessons.length, totalLessons, progress: Math.round(progress) });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// ✅ Mark a lesson as completed
-router.post("/:lessonId/complete", authenticate, async (req, res) => {
+// ✅ Get Recently Watched Videos
+router.get("/recent-videos", authenticate, async (req, res) => {
   try {
-    const { lessonId } = req.params;
-    const user = await User.findById(req.user.id);
-
+    const user = await User.findById(req.user.id).populate("recentVideos.lesson");
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // ✅ Prevent duplicate completions
-    if (user.completedLessons.includes(lessonId)) {
-      return res.status(400).json({ message: "Lesson already completed" });
-    }
-
-    user.completedLessons.push(lessonId);
-    await user.save();
-
-    res.json({ message: "Lesson marked as completed!", lessonId });
+    res.json(user.recentVideos || []);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-});
-
-// ✅ Unmark a lesson as completed
-router.post("/:lessonId/uncomplete", authenticate, async (req, res) => {
-  try {
-    const { lessonId } = req.params;
-    const userId = req.user.id;
-
-    const lesson = await Lesson.findById(lessonId);
-    if (!lesson) return res.status(404).json({ message: "Lesson not found" });
-
-    if (!lesson.completedBy.includes(userId)) {
-      return res.status(400).json({ message: "Lesson is not completed yet" });
-    }
-
-    lesson.completedBy = lesson.completedBy.filter(id => id.toString() !== userId);
-    await lesson.save();
-
-    res.json({ message: "Lesson unmarked as completed!", lessonId });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 });
 

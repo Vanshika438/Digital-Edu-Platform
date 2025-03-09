@@ -8,6 +8,8 @@ const Profile = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "", avatar: "" });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [recentLessons, setRecentLessons] = useState([]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -18,8 +20,35 @@ const Profile = () => {
         password: "",
         avatar: user.avatar || "",
       });
+
+      fetchProgress();
+      fetchRecentLessons();
     }
   }, [user]);
+
+  const fetchProgress = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const { data } = await axios.get("http://localhost:5000/api/users/progress", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setProgress(data.progress);
+    } catch (error) {
+      console.error("Error fetching progress:", error);
+    }
+  };
+
+  const fetchRecentLessons = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const { data } = await axios.get("http://localhost:5000/api/users/recent-lessons", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setRecentLessons(data || []);
+    } catch (error) {
+      console.error("Error fetching recent lessons:", error);
+    }
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -31,7 +60,7 @@ const Profile = () => {
   };
 
   const handleAvatarClick = () => {
-    fileInputRef.current.click(); // Trigger file input click when avatar is clicked
+    fileInputRef.current.click();
   };
 
   const handleChange = (e) => {
@@ -42,29 +71,20 @@ const Profile = () => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-  
+
     try {
       const token = localStorage.getItem("token");
-      console.log("Sending request to update profile:", formData);
-  
       const { data } = await axios.put("http://localhost:5000/auth/profile", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
-      console.log("✅ Profile updated successfully:", data);
+
       setUser(data);
       setMessage("✅ Profile updated successfully!");
     } catch (error) {
-      console.error("❌ Error updating profile:", error.response?.data || error.message);
       setMessage(error.response?.data?.message || "❌ Error updating profile.");
     }
-  
-    setLoading(false);
-  };
-  
 
-  const getInitial = (name) => {
-    return name ? name.charAt(0).toUpperCase() : "?";
+    setLoading(false);
   };
 
   return (
@@ -73,35 +93,49 @@ const Profile = () => {
       {message && <p className="message">{message}</p>}
 
       {user ? (
-        <form className="profile-form" onSubmit={handleSubmit}>
-          <div className="profile-avatar" onClick={handleAvatarClick}>
-            {formData.avatar ? (
-              <img src={formData.avatar} alt="Profile" className="avatar" />
-            ) : (
-              <div className="avatar-placeholder">{getInitial(formData.name)}</div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
+        <>
+          <form className="profile-form" onSubmit={handleSubmit}>
+            <div className="profile-avatar" onClick={handleAvatarClick}>
+              {formData.avatar ? (
+                <img src={formData.avatar} alt="Profile" className="avatar" />
+              ) : (
+                <div className="avatar-placeholder">{user.name.charAt(0).toUpperCase()}</div>
+              )}
+              <input type="file" accept="image/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
+            </div>
+
+            <label>Name:</label>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+
+            <label>Email:</label>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+
+            <label>New Password:</label>
+            <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Leave blank to keep current password" />
+
+            <button type="submit" disabled={loading}>{loading ? "Updating..." : "Update Profile"}</button>
+          </form>
+
+          {/* User Progress */}
+          <h3>Your Progress</h3>
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progress}%` }}>
+              {Math.round(progress)}%
+            </div>
           </div>
 
-          <label>Name:</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-
-          <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-
-          <label>New Password:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Leave blank to keep current password" />
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Profile"}
-          </button>
-        </form>
+          {/* Recently Watched Lessons */}
+          <h3>Recently Watched Lessons</h3>
+          {recentLessons.length === 0 ? (
+            <p>No recent lessons.</p>
+          ) : (
+            <ul>
+              {recentLessons.map((lesson) => (
+                <li key={lesson._id}>{lesson.lesson.title} (Last Watched: {new Date(lesson.watchedAt).toLocaleString()})</li>
+              ))}
+            </ul>
+          )}
+        </>
       ) : (
         <p>No user logged in.</p>
       )}

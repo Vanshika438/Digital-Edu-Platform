@@ -1,0 +1,191 @@
+/* Playlist.css */
+
+/* General Styles */
+.playlists-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+.navigate-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.navigate-button:hover {
+  background-color: #0056b3;
+}
+
+/* Playlist Controls */
+.playlist-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.playlist-controls input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.playlist-controls select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  height: 150px;
+  overflow-y: auto;
+}
+
+.playlist-controls button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.playlist-controls button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.playlist-controls button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+/* Playlist List */
+.playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.playlist-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: box-shadow 0.3s ease;
+}
+
+.playlist-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.playlist-item h3 {
+  font-size: 20px;
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.playlist-item p {
+  margin: 0 0 10px;
+  color: #666;
+}
+
+.toggle-lessons-button {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.toggle-lessons-button:hover {
+  background-color: #138496;
+}
+
+/* Playlist Lessons Grid Layout */
+.playlist-lessons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjust minmax for video width */
+  gap: 15px; /* Space between videos */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+.playlist-lessons.expanded {
+  max-height: 1000px; /* Adjust based on your content */
+}
+
+.lesson-item {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+}
+
+.lesson-item h4 {
+  font-size: 16px;
+  margin: 0 0 10px;
+  color: #444;
+}
+
+.lesson-item iframe {
+  width: 100%;
+  height: 200px;
+  border: none;
+  border-radius: 5px;
+}
+
+.lesson-item p {
+  color: #ff0000;
+  font-size: 14px;
+}
+
+/* Delete Button */
+.delete-playlist-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.delete-playlist-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.delete-playlist-button:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+/* Loading State */
+p {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}

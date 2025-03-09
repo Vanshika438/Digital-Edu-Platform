@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/style.css";
+import "../styles/UserAvtar.css";
 
 const UserAvatar = ({ user }) => {
   const navigate = useNavigate();

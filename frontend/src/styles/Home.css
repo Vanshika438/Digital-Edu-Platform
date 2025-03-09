@@ -1,0 +1,84 @@
+/* Home.css */
+.home-container {
+    text-align: center;
+    padding: 2em;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 2em auto;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .home-title {
+    font-size: clamp(2.5em, 5vw, 3.5em);
+    color: #2c3e50;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+  }
+  
+  .home-subtitle {
+    font-size: 1.5em;
+    color: #7f8c8d;
+    margin-bottom: 2em;
+  }
+  
+  .home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    flex-wrap: wrap;
+  }
+  
+  .home-button {
+    width: 150px;
+    padding: 0.75em 1.5em;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .home-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .register {
+    background-color: #2ecc71;
+  }
+  
+  .register:hover {
+    background-color: #27ae60;
+  }
+  
+  /* Responsive Styles for Home */
+  @media (max-width: 768px) {
+    .home-container {
+      padding: 1.5em;
+    }
+  
+    .home-buttons {
+      flex-direction: column;
+      gap: 1em;
+    }
+  
+    .home-button {
+      width: 100%;
+    }
+  }

@@ -1,0 +1,161 @@
+/* Lesson.css */
+
+.lessons-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.lessons-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.add-lesson-btn {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-lesson-btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  font-weight: bold;
+  transition: width 0.3s ease;
+}
+
+.lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 0;
+}
+
+.lesson-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lesson-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.lesson-card.completed {
+  background-color: #e8f5e9;
+  border-color: #c8e6c9;
+}
+
+.lesson-card h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.lesson-card p {
+  color: #555;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  margin: 15px 0;
+  border-radius: 5px;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.download-notes-btn {
+  display: inline-block;
+  margin: 10px 0;
+  padding: 8px 16px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.download-notes-btn:hover {
+  background-color: #1e88e5;
+  transform: scale(1.05);
+}
+
+.complete-btn,
+.uncomplete-btn {
+  display: inline-block;
+  margin: 10px 0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.complete-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.complete-btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.uncomplete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.uncomplete-btn:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
